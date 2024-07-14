@@ -1,0 +1,85 @@
+Use this for reference:
+https://bell-sw.com/blog/how-to-deploy-spring-boot-application-on-kubernetes/#mcetoc_1he7nfcuc6d
+
+1. Create the application folder with everything in it.
+2. Build the runnable jar with mvn package or use the context menu.
+3. Create a Dockerfile:
+FROM: imports the base image from a repo.
+COPY: copy the runnable jar from the target folder to root folder of container.
+EXPOSE: set the port to for our web application.
+ENTRYPOINT run jar file inside the container.
+
+Sample:
+FROM bellsoft/liberica-runtime-container:jre-17-stream-musl
+COPY target/spring-boot-app-0.0.1-SNAPSHOT.jar springbootapp.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/springbootapp.jar"]
+
+4. Containerize the app.
+$ docker build . -t spring-boot-app
+
+5. Run the container:
+$ docker run -p 8080:8080 spring-boot-app
+
+6. Verify the app is running:
+$ curl localhost:8080/actuator/health or use browser.
+
+Push the image to the container registry
+
+Before deploying the application on Kubernetes,
+you need to publish it on a container registry because this is where
+Kubernetes pulls the images. We will use the Docker Hub Container Registry,
+so you must create a Docker ID if you don’t have one yet. After that,
+run the following commands (replace the <docker-id> with your Docker Hub username):
+$ docker tag spring-boot-app <docker-id>/spring-boot-app
+$ docker push <docker-id>/spring-boot-app
+
+Create Kubernetes deployment file
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-boot-app
+  template:
+    metadata:
+      labels:
+        app: spring-boot-app
+    spec:
+      containers:
+        - name: spring-boot-app
+          image: <docker-id>/spring-boot-app
+          ports:
+            - containerPort: 8080
+
+Create a Kubernetes service file
+apiVersion: v1
+kind: Service
+metadata:
+ name: spring-boot-app
+spec:
+ type: LoadBalancer
+ selector:
+   app: spring-boot-app
+ ports:
+   - protocol: TCP
+     port: 80
+     targetPort: 8080
+
+
+
+Deploy the container image to Kubernetes
+$ kubectl apply -f deployment.yaml
+$ kubectl apply -f service.yaml
+
+You should get this output:
+deployment.apps/spring-boot-app created
+service/spring-boot-app created
+
+
+Let’s make sure that our application is running. Execute
+$ kubectl get all
+
