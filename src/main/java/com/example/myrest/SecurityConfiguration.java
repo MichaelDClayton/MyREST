@@ -1,31 +1,40 @@
 package com.example.myrest;
 
+import com.example.myrest.model.MyUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Autowired
+    private MyUserDetailService myUserDetailService;
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public UserDetailsService userDetailsService(){
+        return myUserDetailService;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
-                    authorizationManagerRequestMatcherRegistry.requestMatchers("/home").permitAll();
+                    authorizationManagerRequestMatcherRegistry.requestMatchers("/home","/register/**").permitAll();
                     authorizationManagerRequestMatcherRegistry.requestMatchers("/admin/**").hasRole("ADMIN");
                     authorizationManagerRequestMatcherRegistry.requestMatchers("/user/**").hasRole("USER");
                     authorizationManagerRequestMatcherRegistry.anyRequest().authenticated();
@@ -35,19 +44,11 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails normalUser = User.builder()
-                .username("gc")
-                .password(bCryptPasswordEncoder().encode("1234"))
-                .roles("USER")
-                .build();
-
-        UserDetails adminUser = User.builder()
-                .username("admin")
-                .password(bCryptPasswordEncoder().encode("9876"))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(normalUser, adminUser);
-
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(myUserDetailService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
+
 }

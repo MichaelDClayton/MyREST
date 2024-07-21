@@ -1,1 +1,3 @@
 com/example/myrest/MyRestApplication.class
+com/example/myrest/ContentController.class
+com/example/myrest/SecurityConfiguration.class
