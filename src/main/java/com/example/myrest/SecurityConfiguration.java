@@ -18,7 +18,7 @@ public class SecurityConfiguration {
 
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -34,13 +34,11 @@ public class SecurityConfiguration {
                 .build();
     }
 
-
-
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails normalUser = User.builder()
                 .username("gc")
-               .password(bCryptPasswordEncoder().encode("1234"))
+                .password(bCryptPasswordEncoder().encode("1234"))
                 .roles("USER")
                 .build();
 
