@@ -42,7 +42,12 @@ public class SecurityConfiguration {
                 .roles("USER")
                 .build();
 
+        UserDetails adminUser = User.builder()
+                .username("admin")
+                .password(bCryptPasswordEncoder().encode("9876"))
+                .roles("ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(normalUser, adminUser);
 
-        return new InMemoryUserDetailsManager(normalUser);
     }
 }
