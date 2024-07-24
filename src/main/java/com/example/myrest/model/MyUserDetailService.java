@@ -22,7 +22,7 @@ public class MyUserDetailService implements UserDetailsService {
             return User.builder()
                     .password(userObj.getPassword())
                     .username(userObj.getUsername())
-                    .roles(userObj.getRoles(userObj))
+                    .roles(getRoles(userObj))
                     .build();
         }else{
             throw new UsernameNotFoundException(username);
@@ -30,9 +30,9 @@ public class MyUserDetailService implements UserDetailsService {
     }
 
     private String[] getRoles(MyUser myUser) {
-        if(myUser.getRoles(myUser) != null) {
+        if(myUser.getRole() == null) {
             return new String[]{"USER"};
         }
-        return myUser.getRoles(myUser).split(",");
+        return myUser.getRole().split(",");
     }
 }

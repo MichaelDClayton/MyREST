@@ -1,3 +1,7 @@
 /Users/mclayton/IdeaProjects/MyREST/src/main/java/com/example/myrest/ContentController.java
 /Users/mclayton/IdeaProjects/MyREST/src/main/java/com/example/myrest/MyRestApplication.java
+/Users/mclayton/IdeaProjects/MyREST/src/main/java/com/example/myrest/RegistrationController.java
 /Users/mclayton/IdeaProjects/MyREST/src/main/java/com/example/myrest/SecurityConfiguration.java
+/Users/mclayton/IdeaProjects/MyREST/src/main/java/com/example/myrest/model/MyUser.java
+/Users/mclayton/IdeaProjects/MyREST/src/main/java/com/example/myrest/model/MyUserDetailService.java
+/Users/mclayton/IdeaProjects/MyREST/src/main/java/com/example/myrest/model/MyUserRepository.java

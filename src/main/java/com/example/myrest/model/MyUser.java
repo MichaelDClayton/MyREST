@@ -12,7 +12,7 @@ public class MyUser {
     private Long id;
     private String username;
     private String password;
-    private String roles;
+    private String role;
 
     public Long getId() {
         return id;
@@ -38,11 +38,11 @@ public class MyUser {
         this.password = password;
     }
 
-    public String getRoles(MyUser userObj) {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
