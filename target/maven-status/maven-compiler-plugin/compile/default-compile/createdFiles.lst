@@ -1,7 +1,8 @@
-com/example/myrest/RegistrationController.class
 com/example/myrest/MyRestApplication.class
+com/example/myrest/AuthenticationSuccessHandler.class
+com/example/myrest/SecurityConfiguration.class
+com/example/myrest/model/MyUserRepository.class
+com/example/myrest/RegistrationController.class
 com/example/myrest/ContentController.class
 com/example/myrest/model/MyUserDetailService.class
 com/example/myrest/model/MyUser.class
-com/example/myrest/SecurityConfiguration.class
-com/example/myrest/model/MyUserRepository.class
