@@ -1,28 +1,31 @@
-package com.example.myrest;
+package com.example.myrest.controller;
 
-import com.example.myrest.model.MyUserDetailService;
-import com.example.myrest.webtoken.JWTService;
-import com.example.myrest.webtoken.LoginForm;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.myrest.service.JWTService;
+import com.example.myrest.model.LoginForm;
+import com.example.myrest.service.MyUserDetailService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ContentController {
 
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JWTService jwtService;
-    @Autowired
-    private MyUserDetailService myUserDetailService;
+
+    private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
+    private final MyUserDetailService myUserDetailService;
+
+    public ContentController(AuthenticationManager authenticationManager, JWTService jwtService, MyUserDetailService myUserDetailService){
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.myUserDetailService = myUserDetailService;
+    }
 
     @GetMapping("/home")
     public String handleWelcome() {
@@ -37,6 +40,16 @@ public class ContentController {
     @GetMapping("/user/home")
     public String handleUserHome() {
         return "Welcome to USER home!";
+    }
+
+    @GetMapping("/admin/home/users/all")
+    public List<UserDetails> getAllUsers(){
+        return myUserDetailService.loadAllUsers();
+    }
+
+    @GetMapping("/admin/home/users/{id}")
+    public UserDetails findUserById(@PathVariable Long id) {
+      return myUserDetailService.findUserById(id);
     }
 
     @PostMapping("/authenticate")

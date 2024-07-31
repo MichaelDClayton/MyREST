@@ -1,7 +1,6 @@
-package com.example.myrest;
-import com.example.myrest.model.MyUserDetailService;
-import com.example.myrest.webtoken.JWTAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+package com.example.myrest.configuration;
+import com.example.myrest.filter.JWTAuthenticationFilter;
+import com.example.myrest.service.MyUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,10 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Autowired
-    private MyUserDetailService userDetailService;
-    @Autowired
-    private JWTAuthenticationFilter jwtAuthenticationFilter;
+
+    private final MyUserDetailService userDetailService;
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfiguration(MyUserDetailService userDetailService, JWTAuthenticationFilter jwtAuthenticationFilter){
+        this.userDetailService = userDetailService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {

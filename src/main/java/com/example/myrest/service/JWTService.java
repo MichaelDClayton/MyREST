@@ -1,4 +1,4 @@
-package com.example.myrest.webtoken;
+package com.example.myrest.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

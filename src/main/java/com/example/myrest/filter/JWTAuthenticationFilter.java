@@ -1,12 +1,12 @@
-package com.example.myrest.webtoken;
+package com.example.myrest.filter;
 
 
-import com.example.myrest.model.MyUserDetailService;
+import com.example.myrest.service.JWTService;
+import com.example.myrest.service.MyUserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,10 +19,14 @@ import java.io.IOException;
 @Configuration
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JWTService jwtService;
-    @Autowired
-    private MyUserDetailService myUserDetailService;
+
+    private final JWTService jwtService;
+    private final MyUserDetailService myUserDetailService;
+
+    public JWTAuthenticationFilter(JWTService jwtService, MyUserDetailService myUserDetailService){
+        this.jwtService = jwtService;
+        this.myUserDetailService = myUserDetailService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
