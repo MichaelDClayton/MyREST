@@ -10,4 +10,5 @@ public class JWTApplication {
         SpringApplication.run(JWTApplication.class, args);
     }
 
+
 }

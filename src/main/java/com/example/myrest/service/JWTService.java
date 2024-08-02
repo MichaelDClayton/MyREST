@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class JWTService {
     private static final String SECRET = "4E69A4381F2C513DCD594664CB308A7362BE1C1ABA4182F24D243177C26756E2559570A65AE4AAB7391F9D0917E83D0F24A2E2D646362F2C75F1C378417E170E";
     private static final long TOKEN_DURATION = TimeUnit.MINUTES.toMillis(30);
+
     public String generateToken(UserDetails userDetails) {
         HashMap<String, String> claims = new HashMap<>();
         claims.put("iss", "http://localhost:8080");
